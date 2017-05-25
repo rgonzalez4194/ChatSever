@@ -87,8 +87,9 @@ public class ThreadServer implements Runnable{
 	
 	public static void main(String[] args)
 	{
+		int port = Integer.parseInt(args[0]);
 		try {
-			ss = new ServerSocket(4200);
+			ss = new ServerSocket(port);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

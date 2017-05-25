@@ -75,7 +75,9 @@ public class Client implements Runnable{
 		
 		public static void main(String[] args)
 		{
-			Client client = new Client("localhost",4200); 
+			int port = Integer.parseInt(args[1]);
+			String host = args[0];
+			Client client = new Client(host,port); 
 		}
 		
 		
