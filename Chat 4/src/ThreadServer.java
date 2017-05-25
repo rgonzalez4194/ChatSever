@@ -4,70 +4,84 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 // http://docs.oracle.com/javase/tutorial/networking/sockets/readingWriting.html
 
 public class ThreadServer implements Runnable{
-private static ServerSocket ss; 
-private DataInputStream dis;
-private DataOutputStream dos; 
-private boolean running;  
 
-	public ThreadServer(ServerSocket ss)
+	private ArrayList<ThreadServer> threads;
+	private static ServerSocket ss; 
+	DataInputStream  dis;
+	DataOutputStream dos ;
+	private boolean running;  
+	private Socket s;
+
+	public ThreadServer(){
+		threads = new ArrayList<ThreadServer>();
+	}
+
+	public ThreadServer(Socket s,ArrayList<ThreadServer> threads)
 	{
-		try {
-			Socket s = ss.accept();
-			DataInputStream dis = new DataInputStream(new BufferedInputStream (s.getInputStream()));
-			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+		this.s = s;
+		this.running = true;
+		this.threads = threads;
 	}
 	
 	public void run(){
-		Socket s;
-		try {
-			//accept a client to the server, opens a new socket
-			s = ss.accept();
-			run(); 
+		try { 
+			dis = new DataInputStream(new BufferedInputStream (s.getInputStream()));
+			dos = new DataOutputStream(s.getOutputStream());
+		
+			while(running)
+			{
+				try {
+					String line = dis.readUTF();
+					sendAll(line);
+					//sendMessage(line);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					running = false;
+				} 
+				
+			}
+		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			threads.remove(threads.indexOf(this));
 		} 
 		
-		while(running)
-		{
-			try {
-				String line = dis.readUTF();
-				dos.writeUTF(line);
-				dos.flush(); 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+		
+	}
+	
+	public void sendMessage(String line) throws IOException{
+		dos.writeUTF(line);
+		dos.flush();
+	}
+	
+	public void sendAll(String message) throws IOException{
+		for(int i=0; i<this.threads.size(); i++){
+			ThreadServer thread = this.threads.get(i);
+			thread.sendMessage(message);
 		}
-		
-		
 	}
 	
 	// Creates new threads
 	public void runServer()
 	{
-		Thread thread = new Thread(this); 
 		running = true;
-		while(running)
-		{
+		System.out.println("Server running!");
+		while(running){
 			try {
-				String line = dis.readUTF();
-				dos.writeUTF(line);
-				dos.flush(); 
+				threads.add(new ThreadServer(ss.accept(), threads));
+				new Thread(threads.get(threads.size()-1)).start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			
+			} 
 		}
 	}
 	
@@ -79,12 +93,8 @@ private boolean running;
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ThreadServer server = new ThreadServer(ss);
+		ThreadServer server = new ThreadServer();
 		server.runServer();
 	}
-	
-	
-	
-	
 	
 }
