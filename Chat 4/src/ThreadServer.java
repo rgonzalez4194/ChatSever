@@ -87,15 +87,16 @@ public class ThreadServer implements Runnable{
 	
 	public static void main(String[] args)
 	{
-		int port = Integer.parseInt(args[0]);
 		try {
+			int port = Integer.parseInt(args[0]);
 			ss = new ServerSocket(port);
+			ThreadServer server = new ThreadServer();
+			server.runServer();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch(ArrayIndexOutOfBoundsException a){
+			System.out.println("Usage: \njava ThreadServer (port number)");
 		}
-		ThreadServer server = new ThreadServer();
-		server.runServer();
 	}
 	
 }
