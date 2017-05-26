@@ -5,8 +5,9 @@ import java.io.BufferedInputStream;
 	import java.net.ServerSocket;
 	import java.net.Socket;
 import java.util.ArrayList;
+
 public class Client implements Runnable{
-	// http://docs.oracle.com/javase/tutorial/networking/sockets/readingWriting.html
+	
 	private Socket s; 
 	private DataInputStream dis;
 	private DataInputStream user;
@@ -16,7 +17,7 @@ public class Client implements Runnable{
 	public static String name;
 	private GUI gui;
 
-
+		//Constructor, takes host ip and a port
 		public Client(String host, int port)
 		{
 			running = true;
@@ -24,29 +25,39 @@ public class Client implements Runnable{
 				//connects to server
 				s = new Socket(host, port);
 				dis = new DataInputStream(new BufferedInputStream (s.getInputStream()));
+
 				gui = new GUI(name, 20, 60);
+
+				//starts recieving messages
 				receive(); 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Could not connect to Server.");
 			} 
 		}
 		
+		// Constructor
+		// Takes the socket connected to the server and the name of the user
 		public Client(Socket socket, String name)
 		{
+			//sets socket
 			this.s = socket;
 			running = true;
 			try {
+			//creates input and output streams 
 				user = new DataInputStream(System.in);
 				dos = new DataOutputStream(s.getOutputStream());
 				this.name = name;
+				//asks for and sets username
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 		}
-
+		
+		//run method runs when thread is .start-ed
+		//reads input from user and then sends it
 		public void run()
 		{
 			while(running)
@@ -57,15 +68,19 @@ public class Client implements Runnable{
 					dos.flush(); 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					
 				}
 				
 			}
 		}
 		
+		
+		//Receives messages from server
 		public void receive(){
+			//creates a thread to receive incoming messages
 			scanner = new Thread(new Client(s, name));
 			scanner.start();
+			
 			while(running)
 			{
 				try {
@@ -74,19 +89,25 @@ public class Client implements Runnable{
 					//System.out.println(dis.readUTF());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("Server has closed.");
+					running = false;
+					}
 				}
 			}
-		}
 		
+		
+		
+		//Main method, accepting ip and port number
 		public static void main(String[] args)
 		{
+		    // Try to set port number, server name, and user name
 			try {
 				int port = Integer.parseInt(args[1]);
 				String host = args[0];
 				name = args[2];
 				Client client = new Client(host,port); 
 			} catch(ArrayIndexOutOfBoundsException a){
+				// If these arguments are not provided, tell the user how to use the command
 				System.out.println("Usage: \njava Client (hostname) (host port) (username)");
 			}
 		}
