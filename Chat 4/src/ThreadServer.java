@@ -5,28 +5,36 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 // http://docs.oracle.com/javase/tutorial/networking/sockets/readingWriting.html
 
 public class ThreadServer implements Runnable{
 
-	private ArrayList<ThreadServer> threads;
+	private ArrayList<ThreadServer> hosts;
+	private ArrayList<Thread>       threads;
+	
+	private DataInputStream  dis;
+	private DataOutputStream dos;
+	
 	private static ServerSocket ss; 
-	DataInputStream  dis;
-	DataOutputStream dos ;
-	private boolean running;  
-	private Socket s;
+	private        Socket       s;
+	
+	public boolean running; 
+	public String  name;
 
 	//Constructor, creates new array of threads 
 	public ThreadServer(){
-		threads = new ArrayList<ThreadServer>();
+		hosts   = new ArrayList<ThreadServer>();
+		threads = new ArrayList<Thread>();
 	}
 
 	//Super Constructor, Sets socket, tells us our server is running, and passes in current array of threads
-	public ThreadServer(Socket s,ArrayList<ThreadServer> threads)
+	public ThreadServer(Socket s, ArrayList<ThreadServer> hosts, ArrayList<Thread> threads)
 	{
 		this.s = s;
 		this.running = true;
+		this.hosts = hosts;
 		this.threads = threads;
 	}
 	
@@ -39,39 +47,64 @@ public class ThreadServer implements Runnable{
 			dos = new DataOutputStream(s.getOutputStream());
 			
 			//while loop reads messages and sends them to all clients as long as our server is running
+			this.name = dis.readUTF();
+			System.out.println("User: "+name+" has joined the Server!");
 			while(running)
 			{
 				try {
 					String line = dis.readUTF();
+					killThreads();
+					System.out.println(line);
 					sendAll(line);
-					//sendMessage(line);
 				} catch (IOException e) {
-					stop();
 					running = false;
+					killThreads();
+					stop();
 				} 
 				
 			}
 		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			stop();
+			try {
+				running = false;
+				stop();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} 
 		
 		
 	}
 	
-	//closes a thread 
-	public void stop()
-	{
-		threads.remove(threads.indexOf(this));
-		try {
-			dis.close();
-			dos.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private void killThreads() {
+		Iterator<ThreadServer> hostIter   = hosts.iterator();
+		Iterator<Thread>       threadIter = threads.iterator();
+		while(hostIter.hasNext() && threadIter.hasNext()){
+			ThreadServer host   = hostIter.next();
+			Thread       thread = threadIter.next();
+			if(thread.isAlive() && !host.running){
+				System.out.println("User: "+host.name+" has left the Server!");
+				hosts.remove(host);
+				try {
+					host.stop();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				threads.remove(thread);
+				thread.stop();
+			}
 		}
-		
+	}
+
+	//closes a thread 
+	public void stop() throws IOException
+	{
+		if (dos!=null) dos.close();
+		if (dis!=null) dis.close();
+		if (s!=null)   s.close();
 	}
 	
 	//sends message, writes to the output stream and then flushes
@@ -82,10 +115,29 @@ public class ThreadServer implements Runnable{
 	
 	//Sends a message to all created threads in the array of threads
 	public void sendAll(String message) throws IOException{
-		for(int i=0; i<this.threads.size(); i++){
-			ThreadServer thread = this.threads.get(i);
+		for(int i=0; i<this.hosts.size(); i++){
+			ThreadServer thread = this.hosts.get(i);
+			thread.sendMessage(getUsers());
 			thread.sendMessage(message);
 		}
+	}
+	
+	private String getUsers() {
+		String users  = "";
+		boolean first = true;
+		
+		Iterator<ThreadServer> iter = hosts.iterator();
+		while(iter.hasNext()){
+			ThreadServer temp = iter.next();
+			if(first){
+				users = temp.name;
+				first = false;
+			} else {
+				users = users + "," +temp.name;
+			}
+		}
+		
+		return users;
 	}
 	
 	//runs server
@@ -99,12 +151,14 @@ public class ThreadServer implements Runnable{
 				//creates new thread 
 				//ss.accept() listens for a connection to the server socket and then returns the socket connected to
 				//also passes in the current array of threads
-				threads.add(new ThreadServer(ss.accept(), threads));
+				hosts.add(new ThreadServer(ss.accept(), hosts, threads));
 				//starts the newly created thread
-				new Thread(threads.get(threads.size()-1)).start();
+				threads.add(new Thread(hosts.get(hosts.size()-1)));
+				System.out.println("Clients running: "+threads.size());
+				threads.get(threads.size()-1).start();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				running = false;
+				//e.printStackTrace();
 			} 
 		}
 	}
