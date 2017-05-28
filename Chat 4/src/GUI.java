@@ -63,7 +63,7 @@ class GUI {
 			gui += "+----------------"+loopChar('-',width+2)+"+\n";
 			gui += "["+ centerString(info[i],12+3) +" ] ";
 			
-			ansi().eraseScreen().render("@|red" + gui +"|@");
+			printWithColor(gui);
 			if(i<login.length){
 				login[i] = scan.nextLine();
 				if(login[i].length()==0 || login[i].length()>12){
