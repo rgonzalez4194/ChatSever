@@ -153,7 +153,7 @@ public class ThreadServer implements Runnable{
 				//creates new thread 
 				//ss.accept() listens for a connection to the server socket and then returns the socket connected to
 				//also passes in the current array of threads
-				rooms.add(new ThreadServer(ss.accept(), hosts, threads));
+				hosts.add(new ThreadServer(ss.accept(), hosts, threads));
 				//starts the newly created thread
 				threads.add(new Thread(hosts.get(hosts.size()-1)));
 				System.out.println("Clients running: "+threads.size());
