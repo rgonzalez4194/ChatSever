@@ -13,8 +13,10 @@ class GUI {
 	int               minSize;
 	int               width;
 	String            username;
+	String			  color;
 	ArrayList<String> users;
-	ArrayList<String> messages;
+ 	ArrayList<String> messages;
+ 	ArrayList<String>[][] colors;
 	
 	public GUI(String username, int minSize, int width){
 		AnsiConsole.systemInstall();
@@ -37,31 +39,31 @@ class GUI {
 		
 		Scanner scan = new Scanner(System.in);
 		
-		String[] info  = {"NAME", "HOST", "PORT", "CONTINUE"};
-		String[] messages  = {"Your nerdy username is: ", "The cool host IP is: ", "The port-al number is: "};
-		String[] login = new String[3];
+		String[] info  = {"NAME", "HOST", "PORT", /*"COLOR",*/ "CONTINUE"};
+		String[] messages  = {"Your nerdy username is: ", "The cool host IP is: ", "The port-al number is: "/*, "Your beautiful color is: "*/};
+		String[] login = new String[3/*4*/];
 		
 		for(int i=0; i<=login.length; i++){
 			String gui = "\n\n \n\n\n\n\n";
-			gui += ansi().eraseScreen().render("@|DEFAULT +----------------"+loopChar('-',width+2)+"+\n|@");
-			gui += ansi().render("@|DEFAULT ||@"+centerString("@|DEFAULT LOGIN SCREEN|@",width+28)+"@|DEFAULT |\n|@");
-			gui += ansi().render("@|DEFAULT +----------------"+loopChar('-',width+2)+"+\n|@");
-			gui += ansi().render("@|DEFAULT ||@"+centerString("@|DEFAULT WELCOME TO ...                                      |@",width+28)+"@|DEFAULT |\n|@");
-			gui += ansi().render("@|DEFAULT ||@"+centerString("@|RED,BG_WHITE,bold    ___________________  ___   ________          __ |@",width+40)+"@|DEFAULT |\n|@");
-			gui += ansi().render("@|DEFAULT ||@"+centerString("@|RED,BG_WHITE,bold   / ___/_  __/ ____/  |/  /  / ____/ /_  ____ _/ /_|@",width+40)+"@|DEFAULT |\n|@");
-			gui += ansi().render("@|DEFAULT ||@"+centerString("@|RED,BG_WHITE,bold   \\__ \\ / / / __/ / /|_/ /  / /   / __ \\/ __ `/ __/|@",width+40)+"@|DEFAULT |\n|@");
-			gui += ansi().render("@|DEFAULT ||@"+centerString("@|RED,BG_WHITE,bold  ___/ // / / /___/ /  / /  / /___/ / / / /_/ / /_  |@",width+40)+"@|DEFAULT |\n|@");
-			gui += ansi().render("@|DEFAULT ||@"+centerString("@|RED,BG_WHITE,bold /____//_/ /_____/_/  /_/   \\____/_/ /_/\\__,_/\\__/  |@",width+40)+"@|DEFAULT |\n|@");
-			gui += ansi().render("@|DEFAULT |"+centerString(loopChar('/', 55),width+18)+"|\n|@");
-			gui += ansi().render("@|DEFAULT |"+loopChar(' ', width+18)+"|\n|@");
+			gui += ansi().eraseScreen().render("@|green +----------------"+loopChar('-',width+2)+"+\n|@");
+			gui += ansi().render("@|green ||@"+centerString("@|green LOGIN SCREEN|@",width+28)+"@|green |\n|@");
+			gui += ansi().render("@|green +----------------"+loopChar('-',width+2)+"+\n|@");
+			gui += ansi().render("@|green ||@"+centerString("@|green WELCOME TO ...                                      |@",width+28)+"@|green |\n|@");
+			gui += ansi().render("@|green ||@"+centerString("@|green,bold    ___________________  ___   ________          __ |@",width+33)+"@|green |\n|@");
+			gui += ansi().render("@|green ||@"+centerString("@|green,bold   / ___/_  __/ ____/  |/  /  / ____/ /_  ____ _/ /_|@",width+33)+"@|green |\n|@");
+			gui += ansi().render("@|green ||@"+centerString("@|green,bold   \\__ \\ / / / __/ / /|_/ /  / /   / __ \\/ __ `/ __/|@",width+33)+"@|green |\n|@");
+			gui += ansi().render("@|green ||@"+centerString("@|green,bold  ___/ // / / /___/ /  / /  / /___/ / / / /_/ / /_  |@",width+33)+"@|green |\n|@");
+			gui += ansi().render("@|green ||@"+centerString("@|green,bold /____//_/ /_____/_/  /_/   \\____/_/ /_/\\__,_/\\__/  |@",width+33)+"@|green |\n|@");
+			gui += ansi().render("@|green ||@@|green,bold "+centerString(loopChar('/', 55),width+18)+"|@@|green |\n|@");
+			gui += ansi().render("@|green |"+loopChar(' ', width+18)+"|\n|@");
 			if(i > 0){
 				for(int j=0; j<i; j++){
 					String temp = login[j];
-					gui += "|"+centerString(messages[j]+temp+loopChar(' ', 48-(temp.length()+messages[j].length())),width+18)+"|\n";
+					gui += ansi().render("@|green |"+centerString(messages[j]+temp+loopChar(' ', 48-(temp.length()+messages[j].length())),width+18)+"|\n|@");
 				}	
 			}
-			gui += "+----------------"+loopChar('-',width+2)+"+\n";
-			gui += "["+ centerString(info[i],12+3) +" ] ";
+			gui += ansi().render("@|green +----------------"+loopChar('-',width+2)+"+\n|@");
+			gui += ansi().render("@|green [|@"+ ansi().fg(GREEN).fgBrightGreen().a(centerString(info[i],12+3)) +"@|green ]|@");
 			
 			printWithColor(gui);
 			if(i<login.length){
@@ -100,6 +102,11 @@ class GUI {
 		}
 	}
 	
+	public void updateColor(String username, String color)
+	{
+		
+	}
+	
 	public void updateMessages(String message){ 
 		if(message.length()>width){
 			int subdivisions = message.length()/width;
@@ -126,16 +133,16 @@ class GUI {
 		scrollMessages(length);
 		
 		String gui = "\n\n\n\n\n";
-		gui =  gui + "+---------------+"+loopChar('-',width+2)+"+\n";
-		gui =  gui + "|"+ centerString("USERS",12+3) +" |"+centerString("MESSAGES",width+2)+"|\n";
-		gui =  gui + "+---------------+"+loopChar('-',width+2)+"+\n";
+		gui += ansi().render("@|green +---------------+"+loopChar('-',width+2)+"+\n|@");
+		gui += ansi().render("@|green ||@"+ "@|green,bold      USERS|@" +"@|green      ||@"+centerString("@|green,bold MESSAGES|@",width+17)+"@|green  |\n|@");
+		gui += ansi().render("@|green +---------------+"+loopChar('-',width+2)+"+\n|@");
 		for(int i=0; i<length; i++){
 			String user    = (i>users.size()-1) ? (loopChar(' ',12)) : (users.get(i));
 			String message = (i>messages.size()-1) ? (loopChar(' ',width)) : (messages.get(i));
-			gui += "| "+user + "  | " + message+" |\n";
+			gui += ansi().render("@|green | |@"+ansi().fg(GREEN).fgBrightGreen().a(user) + "@|green   | |@" + ansi().fg(GREEN).fgBrightGreen().a(message.substring(0, this.username.length()+1)) + ansi().fg(GREEN).a(message.substring(this.username.length()+1,message.length())) +"@|green  |\n|@");
 		}
-		gui =  gui + "+---------------+"+loopChar('-',width+2)+"+\n";
-		gui =  gui + "["+ centerString(username,12+3) +" ] ";
+		gui += ansi().render("@|green +---------------+"+loopChar('-',width+2)+"+\n|@");
+		gui += ansi().render("@|green [ |@"+ ansi().fg(GREEN).fgBrightGreen().a(centerString(username,12+3)) +"@|green ] |@");
 		
 		
 		return gui;

@@ -10,6 +10,7 @@ public class STEMChat{
 		int port = Integer.parseInt(login[2]);
 		String host = login[1];
 		String name = (login[0].length()>12) ? login[0].substring(0, 11) : login[0];
+		//String color = login[3];
 		Client client = new Client(host,port,name); 
 	}
 }
