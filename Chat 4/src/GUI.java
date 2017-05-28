@@ -39,10 +39,10 @@ class GUI {
 		
 		for(int i=0; i<=login.length; i++){
 			String gui = "\n\n \n\n\n\n\n";
-			gui += colorCode(5,0,0)+ "+----------------"+loopChar('-',width+2)+"+\n";
+			gui += colorCode(5,0,0)+"+----------------"+loopChar('-',width+2)+"+\n";
 			gui += colorCode(0,5,0) +"|"+centerString("LOGIN SCREEN",width+18)+"|\n";
 			gui += "+----------------"+loopChar('-',width+2)+"+\n";
-			gui += "|"+centerString("WELCOME TO ...                                      ",width+18)+"|\n";
+			gui += colorCode(5,0,0)+"|"+centerString("WELCOME TO ...                                      ",width+18)+"|\n";
 			gui += "|"+centerString("    ___________________  ___   ________          __ ",width+18)+"|\n";
 			gui += "|"+centerString("  / ___/_  __/ ____/  |/  /  / ____/ /_  ____ _/ / ",width+18)+"|\n";
 			gui += "|"+centerString("    \\__ \\ / / / __/ / /"+"\\"+"_| /  / /   / __ \\/ __ `/ __/ ",width+18)+"|\n";
