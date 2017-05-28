@@ -43,17 +43,17 @@ class GUI {
 		
 		for(int i=0; i<=login.length; i++){
 			String gui = "\n\n \n\n\n\n\n";
-			gui += ansi().eraseScreen().render("@|red +----------------"+loopChar('-',width+2)+"+\n|@");
-			gui += "|"+centerString("LOGIN SCREEN",width+18)+"|\n";
-			gui += "+----------------"+loopChar('-',width+2)+"+\n";
-			gui += "|"+centerString("WELCOME TO ...                                      ",width+18)+"|\n";
-			gui += "|"+centerString("    ___________________  ___   ________          __ ",width+18)+"|\n";
-			gui += "|"+centerString("  / ___/_  __/ ____/  |/  /  / ____/ /_  ____ _/ / ",width+18)+"|\n";
-			gui += "|"+centerString("    \\__ \\ / / / __/ / /"+"\\"+"_| /  / /   / __ \\/ __ `/ __/ ",width+18)+"|\n";
-			gui += "|"+centerString(" ___/ // / / /___/ /  / /  / /___/ / / / /_/ / /_  ",width+18)+"|\n";
-			gui += "|"+centerString("/____//_/ /_____/_/  /_/   \\____/_/ /_/\\__,_/\\__/  ",width+18)+"|\n";
-			gui += "|"+centerString(loopChar('/', 55),width+18)+"|\n";
-			gui += "|"+loopChar(' ', width+18)+"|\n";
+			gui += ansi().eraseScreen().render("@|grey +----------------"+loopChar('-',width+2)+"+\n|@");
+			gui += ansi().eraseScreen().render("@|grey ||@"+centerString("@|red LOGIN SCREEN|@",width+18)+"@|grey |\n|@");
+			gui += ansi().eraseScreen().render("@|grey +----------------"+loopChar('-',width+2)+"+\n|@");
+			gui += ansi().eraseScreen().render("@|grey ||@"+centerString("@|red WELCOME TO ...                                      |@",width+18)+"@|grey |\n|@");
+			gui += ansi().eraseScreen().render("@|grey ||@"+centerString("@|red    ___________________  ___   ________          __ |@",width+18)+"@|grey |\n|@");
+			gui += ansi().eraseScreen().render("@|grey ||@"+centerString("@|red  / ___/_  __/ ____/  |/  /  / ____/ /_  ____ _/ / |@",width+18)+"@|grey |\n|@");
+			gui += ansi().eraseScreen().render("@|grey ||@"+centerString("@|red    \\__ \\ / / / __/ / /"+"\\"+"_| /  / /   / __ \\/ __ `/ __/ |@",width+18)+"@|grey |\n|@");
+			gui += ansi().eraseScreen().render("@|grey ||@"+centerString("@|red ___/ // / / /___/ /  / /  / /___/ / / / /_/ / /_  |@",width+18)+"@|grey |\n|@");
+			gui += ansi().eraseScreen().render("@|grey ||@"+centerString("@|red/____//_/ /_____/_/  /_/   \\____/_/ /_/\\__,_/\\__/  |@",width+18)+"@|grey |\n|@");
+			gui += ansi().eraseScreen().render("@|grey |"+centerString(loopChar('/', 55),width+18)+"|\n|@");
+			gui += ansi().eraseScreen().render("@|grey |"+loopChar(' ', width+18)+"|\n|@");
 			if(i > 0){
 				for(int j=0; j<i; j++){
 					String temp = login[j];
