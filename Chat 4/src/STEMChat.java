@@ -1,6 +1,5 @@
 public class STEMChat{
 	
-	//Main method, accepting ip and port number
 	public static void main(String[] args)
 	{
 		GUI gui = new GUI(15,60);
