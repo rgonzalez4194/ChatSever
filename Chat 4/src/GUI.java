@@ -43,7 +43,7 @@ class GUI {
 		
 		for(int i=0; i<=login.length; i++){
 			String gui = "\n\n \n\n\n\n\n";
-			gui += "+----------------"+loopChar('-',width+2)+"+\n";
+			gui += ansi().eraseScreen().render("@|red +----------------"+loopChar('-',width+2)+"+\n|@");
 			gui += "|"+centerString("LOGIN SCREEN",width+18)+"|\n";
 			gui += "+----------------"+loopChar('-',width+2)+"+\n";
 			gui += "|"+centerString("WELCOME TO ...                                      ",width+18)+"|\n";
