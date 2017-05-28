@@ -175,8 +175,7 @@ class GUI {
 	
 	private void printWithColor(String print){
 		AnsiConsole.systemInstall();
-		System.out.println( ansi().eraseScreen().render("@|red Hello|@ @|green World|@") );
-		AnsiConsole.out.println(print);
+		AnsiConsole.out.println(ansi().eraseScreen().render(print));
 		AnsiConsole.systemInstall();
 	}
 	
