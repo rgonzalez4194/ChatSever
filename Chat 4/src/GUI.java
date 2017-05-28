@@ -15,6 +15,7 @@ class GUI {
 	ArrayList<String> messages;
 	
 	public GUI(String username, int minSize, int width){
+		AnsiConsole.systemInstall();
 		this.username = username;
 		this.minSize  = minSize;
 		this.width    = width;
@@ -23,6 +24,7 @@ class GUI {
 	}
 	
 	public GUI(int minSize, int width){
+		AnsiConsole.systemInstall();
 		this.minSize  = minSize;
 		this.width    = width;
 		this.users    = new ArrayList<String>();
@@ -172,7 +174,7 @@ class GUI {
 	private void printWithColor(String print){
 		AnsiConsole.systemInstall();
 		AnsiConsole.out.println(print);
-		AnsiConsole.systemUninstall();
+		AnsiConsole.systemInstall();
 	}
 	
 	// Make sure that all values of r, g, and b are between 0 and 5
