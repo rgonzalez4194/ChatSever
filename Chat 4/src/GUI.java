@@ -116,7 +116,7 @@ class GUI {
 		int length = (users.size()>this.minSize) ? (users.size()):(this.minSize);
 		scrollMessages(length);
 		
-		String gui = "\n";
+		String gui = "\n\n\n\n\n";
 		gui =  gui + "+---------------+"+loopChar('-',width+2)+"+\n";
 		gui =  gui + "|"+ centerString("USERS",12+3) +" |"+centerString("MESSAGES",width+2)+"|\n";
 		gui =  gui + "+---------------+"+loopChar('-',width+2)+"+\n";
