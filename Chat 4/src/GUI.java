@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import org.fusesource.jansi.*;
+import static org.fusesource.jansi.Ansi.*;
+import static org.fusesource.jansi.Ansi.Color.*;
 
 class GUI {
 	
@@ -173,6 +175,7 @@ class GUI {
 	
 	private void printWithColor(String print){
 		AnsiConsole.systemInstall();
+		System.out.println( ansi().eraseScreen().render("@|red Hello|@ @|green World|@") );
 		AnsiConsole.out.println(print);
 		AnsiConsole.systemInstall();
 	}
