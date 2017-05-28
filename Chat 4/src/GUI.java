@@ -48,10 +48,10 @@ class GUI {
 			gui += ansi().eraseScreen().render("@|cyan +----------------"+loopChar('-',width+2)+"+\n|@");
 			gui += ansi().eraseScreen().render("@|cyan ||@"+centerString("@|red WELCOME TO ...                                      |@",width+18)+"@|cyan |\n|@");
 			gui += ansi().eraseScreen().render("@|cyan ||@"+centerString("@|red    ___________________  ___   ________          __ |@",width+18)+"@|cyan |\n|@");
-			gui += ansi().eraseScreen().render("@|cyan ||@"+centerString("@|red  / ___/_  __/ ____/  |/  /  / ____/ /_  ____ _/ / |@",width+18)+"@|cyan |\n|@");
-			gui += ansi().eraseScreen().render("@|cyan ||@"+centerString("@|red    \\__ \\ / / / __/ / /"+"\\"+"_| /  / /   / __ \\/ __ `/ __/ |@",width+18)+"@|cyan |\n|@");
-			gui += ansi().eraseScreen().render("@|cyan ||@"+centerString("@|red ___/ // / / /___/ /  / /  / /___/ / / / /_/ / /_  |@",width+18)+"@|cyan |\n|@");
-			gui += ansi().eraseScreen().render("@|cyan ||@"+centerString("@|red/____//_/ /_____/_/  /_/   \\____/_/ /_/\\__,_/\\__/  |@",width+18)+"@|cyan |\n|@");
+			gui += ansi().eraseScreen().render("@|cyan ||@"+centerString("@|red   / ___/_  __/ ____/  |/  /  / ____/ /_  ____ _/ / |@",width+18)+"@|cyan |\n|@");
+			gui += ansi().eraseScreen().render("@|cyan ||@"+centerString("@|red \\__ \\ / / / __/ / /"+"\\"+"_| /  / /   / __ \\/ __ `/ __/ |@",width+18)+"@|cyan |\n|@");
+			gui += ansi().eraseScreen().render("@|cyan ||@"+centerString("@|red __  / // / / /___/ /  / /  / /___/ / / / /_/ / /_  |@",width+18)+"@|cyan |\n|@");
+			gui += ansi().eraseScreen().render("@|cyan ||@"+centerString("@|red /____//_/ /_____/_/  /_/   \\____/_/ /_/\\__,_/\\__/  |@",width+18)+"@|cyan |\n|@");
 			gui += ansi().eraseScreen().render("@|cyan |"+centerString(loopChar('/', 55),width+18)+"|\n|@");
 			gui += ansi().eraseScreen().render("@|cyan |"+loopChar(' ', width+18)+"|\n|@");
 			if(i > 0){
