@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import org.fusesource.jansi.*;
+import static org.fusesource.jansi.Ansi.*;
+import static org.fusesource.jansi.Ansi.Color.*;
 
 class GUI {
 	
@@ -15,6 +17,7 @@ class GUI {
 	ArrayList<String> messages;
 	
 	public GUI(String username, int minSize, int width){
+		AnsiConsole.systemInstall();
 		this.username = username;
 		this.minSize  = minSize;
 		this.width    = width;
@@ -23,6 +26,7 @@ class GUI {
 	}
 	
 	public GUI(int minSize, int width){
+		AnsiConsole.systemInstall();
 		this.minSize  = minSize;
 		this.width    = width;
 		this.users    = new ArrayList<String>();
@@ -170,7 +174,10 @@ class GUI {
 	}
 	
 	private void printWithColor(String print){
+		AnsiConsole.systemInstall();
+		System.out.println( ansi().eraseScreen().render("@|red Hello|@ @|green World|@") );
 		AnsiConsole.out.println(print);
+		AnsiConsole.systemInstall();
 	}
 	
 	// Make sure that all values of r, g, and b are between 0 and 5
