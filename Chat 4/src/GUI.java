@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import org.fusesource.jansi.*;
+import org.fusesource.jansi.Ansi.Color;
+
 import static org.fusesource.jansi.Ansi.*;
 import static org.fusesource.jansi.Ansi.Color.*;
 
@@ -16,7 +18,7 @@ class GUI {
 	String			  color;
 	ArrayList<String> users;
  	ArrayList<String> messages;
- 	ArrayList<String>[][] colors;
+ 	String[] colors;
 	
 	public GUI(String username, int minSize, int width){
 		AnsiConsole.systemInstall();
@@ -39,9 +41,9 @@ class GUI {
 		
 		Scanner scan = new Scanner(System.in);
 		
-		String[] info  = {"NAME", "HOST", "PORT", /*"COLOR",*/ "CONTINUE"};
-		String[] messages  = {"Your nerdy username is: ", "The cool host IP is: ", "The port-al number is: "/*, "Your beautiful color is: "*/};
-		String[] login = new String[3/*4*/];
+		String[] info  = {"NAME", "HOST", "PORT", "COLOR", "CONTINUE"};
+		String[] messages  = {"Your nerdy username is: ", "The cool host IP is: ", "The port-al number is: ", "Your beautiful color is: "};
+		String[] login = new String[4];
 		
 		for(int i=0; i<=login.length; i++){
 			String gui = "\n\n \n\n\n\n\n";
@@ -86,6 +88,22 @@ class GUI {
 		return login;
 	}
 
+	public Color nameColor(String name)
+	{
+		for(int i= 0; i > users.size()-1; i++)
+		{
+			if (name.equals(users.get(i)))
+			{
+				return Ansi.Color.valueOf(colors[i].toUpperCase());
+			}
+			else
+			{
+				return GREEN;
+			}
+		}
+		return null;
+	}
+	
 	public void updateUsers(String users){
 		String[] temp = users.split(",");
 		for(int i=this.users.size()-1; i>=0; i--){
@@ -102,9 +120,9 @@ class GUI {
 		}
 	}
 	
-	public void updateColor(String username, String color)
+	public void updateColors(String colors)
 	{
-		
+		this.colors = colors.split(","); 
 	}
 	
 	public void updateMessages(String message){ 
@@ -141,7 +159,7 @@ class GUI {
 			String message = getMessage(i);
 			String[] messageParts = (message.contains(":")) ? message.split(":",2) : message.split("", 2);
 			System.out.println(message.length()+", "+messageParts[0].length()+", "+messageParts[1].length());
-			gui += ansi().render("@|green | |@"+ansi().fg(GREEN).fgBrightGreen().a(user) + "@|green   | |@" + ansi().fg(GREEN).fgBrightGreen().a(message.substring(0, messageParts[0].length()+1)) + ansi().fg(GREEN).a(message.substring(messageParts[0].length()+1,message.length())) +"@|green  |\n|@");
+			gui += ansi().render("@|green | |@"+ansi().fg(nameColor(user)).fgBright(nameColor(user)).a(user) + "@|green   | |@" + ansi().fg(nameColor(user)).fgBright(nameColor(user)).a(message.substring(0, messageParts[0].length()+1)) + ansi().fg(nameColor(user)).a(message.substring(messageParts[0].length()+1,message.length())) +"@|green  |\n|@");
 		}
 		gui += ansi().render("@|green +---------------+"+loopChar('-',width+2)+"+\n|@");
 		gui += ansi().render("@|green [ |@"+ ansi().fg(GREEN).fgBrightGreen().a(centerString(username,12+3)) +"@|green ] |@");

@@ -15,10 +15,11 @@ public class Client implements Runnable{
 	private boolean running; 
 	private Thread scanner;
 	public static String name;
+	private String color; 
 	private GUI gui;
 
 		//Constructor, takes host ip and a port
-		public Client(String host, int port, String name)
+		public Client(String host, int port, String name, String color)
 		{
 			running = true;
 			try {
@@ -28,7 +29,7 @@ public class Client implements Runnable{
 				user = new DataInputStream(System.in);
 				dos = new DataOutputStream(s.getOutputStream());
 
-				
+				this.color = color; 
 				this.name = name;
 				//starts listening for messages
 				send(); 
@@ -77,6 +78,7 @@ public class Client implements Runnable{
 			
 			try {
 				dos.writeUTF(name);
+				dos.writeUTF(color);
 				dos.flush();
 			} catch (IOException e2) {
 				e2.printStackTrace();
@@ -113,6 +115,9 @@ public class Client implements Runnable{
 			while(running)
 			{
 				try {
+					String colors = dis.readUTF();
+					gui.updateColors(colors);
+					
 					String users = dis.readUTF();
 					gui.updateUsers(users);
 					//System.out.println(users);

@@ -15,6 +15,7 @@ public class ThreadServer implements Runnable{
 
 	private ArrayList<ThreadServer> hosts;
 	private ArrayList<Thread>       threads;
+	private ArrayList<String>       colors; 
 	
 	private DataInputStream  dis;
 	private DataOutputStream dos;
@@ -50,6 +51,7 @@ public class ThreadServer implements Runnable{
 			
 			//while loop reads messages and sends them to all clients as long as our server is running
 			this.name = dis.readUTF();
+			this.colors.add(dis.readUTF());
 			System.out.println("User: "+name+" has joined the Server!");
 			while(running)
 			{
@@ -109,6 +111,7 @@ public class ThreadServer implements Runnable{
 		if (s!=null)   s.close();
 	}
 	
+	
 	//sends message, writes to the output stream and then flushes
 	public void sendMessage(String line) throws IOException{
 		dos.writeUTF(line);
@@ -119,9 +122,28 @@ public class ThreadServer implements Runnable{
 	public void sendAll(String message) throws IOException{
 		for(int i=0; i<this.hosts.size(); i++){
 			ThreadServer thread = this.hosts.get(i);
+			thread.sendMessage(getColors()); 
 			thread.sendMessage(getUsers());
 			thread.sendMessage(message);
 		}
+	}
+	
+	
+	private String getColors()
+	{
+		String colors  = "";
+		boolean first = true;
+		for(int i = 0; i > colors.length()-1; i++)
+		{	String temp = this.colors.get(i);
+			if(first){
+				colors = temp;
+				first = false;
+			} else {
+				colors += "," +temp;
+			}
+		}
+		
+		return colors; 
 	}
 	
 	private String getUsers() {
