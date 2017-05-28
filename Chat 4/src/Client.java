@@ -18,7 +18,7 @@ public class Client implements Runnable{
 	private GUI gui;
 
 		//Constructor, takes host ip and a port
-		public Client(String host, int port, String name)
+		public Client(String host, int port)
 		{
 			running = true;
 			try {
@@ -28,8 +28,6 @@ public class Client implements Runnable{
 				user = new DataInputStream(System.in);
 				dos = new DataOutputStream(s.getOutputStream());
 
-				
-				this.name = name;
 				//starts listening for messages
 				send(); 
 			} catch (IOException e) {
@@ -107,9 +105,6 @@ public class Client implements Runnable{
 		//Receives messages from server
 		public void run(){
 			
-			gui.updateUsers(name);
-			gui.printGUI();
-			
 			while(running)
 			{
 				try {
@@ -135,5 +130,21 @@ public class Client implements Runnable{
 				}
 			}
 		}
+			
+		//Main method, accepting ip and port number
+		public static void main(String[] args)
+		{
+		    // Try to set port number, server name, and user name
+			try {
+				int port = Integer.parseInt(args[1]);
+				String host = args[0];
+				name = args[2];
+				Client client = new Client(host,port); 
+			} catch(ArrayIndexOutOfBoundsException a){
+				// If these arguments are not provided, tell the user how to use the command
+				System.out.println("Usage: \njava Client (hostname) (host port) (username)");
+			}
+		}
 		
 }
+
