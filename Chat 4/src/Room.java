@@ -10,8 +10,9 @@ import java.util.Iterator;
 public class Room implements Runnable{
 
 	private ArrayList<Room> rooms;
-	private ArrayList<Client> clients;
-	
+
+	private ArrayList<Thread> users;
+
 	private DataInputStream  dis;
 	private DataOutputStream dos;
 	
@@ -24,16 +25,16 @@ public class Room implements Runnable{
 	//Constructor, creates new array of threads 
 	public Room(){
 		rooms   = new ArrayList<Room>();
-		clients = new ArrayList<Client>();
+		users = new ArrayList<Thread>();
 	}
 
 	//Super Constructor, Sets socket, tells us our room is running, and passes in current array of other rooms, and users in this room
-	public Room(Socket s, ArrayList<Room> rooms, ArrayList<Client> users)
+	public Room(Socket s, ArrayList<Room> rooms, ArrayList<Thread> users)
 	{
 		this.s = s;
 		this.running = true;
 		this.rooms = rooms;
-		this.clients = users;
+		this.users = users;
 	}
 	
 	//run method runs when you .start a thread
@@ -76,26 +77,27 @@ public class Room implements Runnable{
 		
 	}
 	
-	/*private void killThreads() {
-		Iterator<ThreadServer> hostIter   = clients.iterator();
-		Iterator<Thread>       threadIter = threads.iterator();
+
+	private void killThreads() {
+		Iterator<Room> hostIter   = rooms.iterator();
+		Iterator<Thread>       threadIter = users.iterator();
 		while(hostIter.hasNext() && threadIter.hasNext()){
-			ThreadServer host   = hostIter.next();
+			Room host   = hostIter.next();
 			Thread       thread = threadIter.next();
 			if(thread.isAlive() && !host.running){
 				System.out.println("User: "+host.name+" has left the Server!");
-				hosts.remove(host);
+				rooms.remove(host);
 				try {
 					host.stop();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				threads.remove(thread);
+				users.remove(thread);
 				thread.stop();
 			}
 		}
-	}*/
+	}
 
 	//closes a thread 
 	public void stop() throws IOException
@@ -138,28 +140,29 @@ public class Room implements Runnable{
 		return users;
 	}
 	
-	//runs server
-	//accepts clients into server
-	/*public void runServer()
+
+	//runs Room
+	//accepts clients into room
+	public void runRoom()
 	{
 		running = true;
-		System.out.println("Server running!");
+		System.out.println("The room has been created!");
 		while(running){
 			try {
 				//creates new thread 
 				//ss.accept() listens for a connection to the server socket and then returns the socket connected to
-				//also passes in the current array of threads
-				clients.add(new ThreadServer(ss.accept(), hosts, threads));
+				//also passes in the current array of thread
+				rooms.add(new Room(ss.accept(), rooms, users));
 				//starts the newly created thread
-				threads.add(new Thread(hosts.get(hosts.size()-1)));
-				System.out.println("Clients running: "+threads.size());
-				threads.get(threads.size()-1).start();
+				users.add(new Thread(rooms.get(rooms.size()-1)));
+				System.out.println("Clients running: "+users.size());
+				users.get(users.size()-1).start();
 			} catch (IOException e) {
 				running = false;
 				//e.printStackTrace();
 			} 
 		}
-	}*/
+	}
 	
 	//Main method
 	public static void main(String[] args)
