@@ -10,8 +10,9 @@ import java.util.Iterator;
 public class Room implements Runnable{
 
 	private ArrayList<Room> rooms;
+
 	private ArrayList<Thread> users;
-	
+
 	private DataInputStream  dis;
 	private DataOutputStream dos;
 	
@@ -51,12 +52,12 @@ public class Room implements Runnable{
 			{
 				try {
 					String line = dis.readUTF();
-					killThreads();
+					//killThreads();
 					System.out.println(line);
 					sendAll(line);
 				} catch (IOException e) {
 					running = false;
-					killThreads();
+					//killThreads();
 					stop();
 				} 
 				
@@ -76,6 +77,7 @@ public class Room implements Runnable{
 		
 	}
 	
+
 	private void killThreads() {
 		Iterator<Room> hostIter   = rooms.iterator();
 		Iterator<Thread>       threadIter = users.iterator();
@@ -138,6 +140,7 @@ public class Room implements Runnable{
 		return users;
 	}
 	
+
 	//runs Room
 	//accepts clients into room
 	public void runRoom()
@@ -148,7 +151,7 @@ public class Room implements Runnable{
 			try {
 				//creates new thread 
 				//ss.accept() listens for a connection to the server socket and then returns the socket connected to
-				//also passes in the current array of threads
+				//also passes in the current array of thread
 				rooms.add(new Room(ss.accept(), rooms, users));
 				//starts the newly created thread
 				users.add(new Thread(rooms.get(rooms.size()-1)));

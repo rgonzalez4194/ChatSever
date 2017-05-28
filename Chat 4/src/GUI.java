@@ -1,7 +1,12 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import org.fusesource.jansi.*;
 
 class GUI {
+	
+	// The CLS code is used to clear the screen, the normal code must be used to reset colors
+	private static final String ANSI_CLS = "\u001b[2J";
+	public static final String ANSI_NORMAL = "\u001b[0m";
 	
 	int               minSize;
 	int               width;
@@ -33,7 +38,7 @@ class GUI {
 		String[] login = new String[3];
 		
 		for(int i=0; i<=login.length; i++){
-			String gui = "\n\n\n\n\n\n\n\n\n\n";
+			String gui = "\n\n\n\n\n\n\n";
 			gui += "+----------------"+loopChar('-',width+2)+"+\n";
 			gui += "|"+centerString("LOGIN SCREEN",width+18)+"|\n";
 			gui += "+----------------"+loopChar('-',width+2)+"+\n";
@@ -54,7 +59,7 @@ class GUI {
 			gui += "+----------------"+loopChar('-',width+2)+"+\n";
 			gui += "["+ centerString(info[i],12+3) +" ] ";
 			
-			System.out.print(gui);
+			printWithColor(gui);
 			if(i<login.length){
 				login[i] = scan.nextLine();
 				if(login[i].length()==0 || login[i].length()>12){
@@ -109,7 +114,7 @@ class GUI {
 	}
 	
 	public void printGUI(){
-		System.out.print(makeGUI());
+		printWithColor(makeGUI());
 	}
 	
 	private String makeGUI(){
@@ -162,6 +167,20 @@ class GUI {
 		} else {
 			return text;
 		}
+	}
+	
+	private void printWithColor(String print){
+		AnsiConsole.out.println(print);
+	}
+	
+	// Make sure that all values of r, g, and b are between 0 and 5
+	private String colorCode(int r, int g, int b){
+		return "\u001b[38;5;"+(16 + 36 * r + 6 * g + b)+"m";
+	}
+	
+	// Make sure that all values of r, g, and b are between 0 and 5
+	private String colorBackCode(int r, int g, int b){
+		return "\u001b[48;5;"+(16 + 36 * r + 6 * g + b)+"m";
 	}
 }
 
