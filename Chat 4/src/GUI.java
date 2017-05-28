@@ -138,8 +138,10 @@ class GUI {
 		gui += ansi().render("@|green +---------------+"+loopChar('-',width+2)+"+\n|@");
 		for(int i=0; i<length; i++){
 			String user    = (i>users.size()-1) ? (loopChar(' ',12)) : (users.get(i));
-			String message = (i>messages.size()-1) ? (loopChar(' ',width)) : (messages.get(i));
-			gui += ansi().render("@|green | |@"+ansi().fg(GREEN).fgBrightGreen().a(user) + "@|green   | |@" + ansi().fg(GREEN).fgBrightGreen().a(message.substring(0, this.username.length()+1)) + ansi().fg(GREEN).a(message.substring(this.username.length()+1,message.length())) +"@|green  |\n|@");
+			String message = getMessage(i);
+			String[] messageParts = (message.contains(":")) ? message.split(":",2) : message.split("", 2);
+			System.out.println(message.length()+", "+messageParts[0].length()+", "+messageParts[1].length());
+			gui += ansi().render("@|green | |@"+ansi().fg(GREEN).fgBrightGreen().a(user) + "@|green   | |@" + ansi().fg(GREEN).fgBrightGreen().a(message.substring(0, messageParts[0].length()+1)) + ansi().fg(GREEN).a(message.substring(messageParts[0].length()+1,message.length())) +"@|green  |\n|@");
 		}
 		gui += ansi().render("@|green +---------------+"+loopChar('-',width+2)+"+\n|@");
 		gui += ansi().render("@|green [ |@"+ ansi().fg(GREEN).fgBrightGreen().a(centerString(username,12+3)) +"@|green ] |@");
@@ -148,6 +150,19 @@ class GUI {
 		return gui;
 	}
 	
+	private String getMessage(int i) {
+		
+		if(!messages.isEmpty()){
+			if(i<=messages.size()-1){
+				if(messages.get(i).length() >1){
+					return messages.get(i);
+				}
+			}
+		}
+		
+		return (loopChar(' ',width));
+	}
+
 	private void scrollMessages(int length){
 		if(messages.size() > length) {
 			int remove = (messages.size()-length > 0) ? (messages.size()-length) : 0;
