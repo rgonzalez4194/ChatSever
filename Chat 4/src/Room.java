@@ -10,7 +10,7 @@ import java.util.Iterator;
 public class Room implements Runnable{
 
 	private ArrayList<Room> rooms;
-	private ArrayList<Client> users;
+	private ArrayList<Client> clients;
 	
 	private DataInputStream  dis;
 	private DataOutputStream dos;
@@ -33,7 +33,7 @@ public class Room implements Runnable{
 		this.s = s;
 		this.running = true;
 		this.rooms = rooms;
-		this.users = users;
+		this.clients = users;
 	}
 	
 	//run method runs when you .start a thread
@@ -51,12 +51,12 @@ public class Room implements Runnable{
 			{
 				try {
 					String line = dis.readUTF();
-					killThreads();
+					//killThreads();
 					System.out.println(line);
 					sendAll(line);
 				} catch (IOException e) {
 					running = false;
-					killThreads();
+					//killThreads();
 					stop();
 				} 
 				
@@ -76,8 +76,8 @@ public class Room implements Runnable{
 		
 	}
 	
-	private void killThreads() {
-		Iterator<ThreadServer> hostIter   = hosts.iterator();
+	/*private void killThreads() {
+		Iterator<ThreadServer> hostIter   = clients.iterator();
 		Iterator<Thread>       threadIter = threads.iterator();
 		while(hostIter.hasNext() && threadIter.hasNext()){
 			ThreadServer host   = hostIter.next();
@@ -95,7 +95,7 @@ public class Room implements Runnable{
 				thread.stop();
 			}
 		}
-	}
+	}*/
 
 	//closes a thread 
 	public void stop() throws IOException
@@ -124,9 +124,9 @@ public class Room implements Runnable{
 		String users  = "";
 		boolean first = true;
 		
-		Iterator<ThreadServer> iter = room.iterator();
+		Iterator<Room> iter = rooms.iterator();
 		while(iter.hasNext()){
-			ThreadServer temp = iter.next();
+			Room temp = iter.next();
 			if(first){
 				users = temp.name;
 				first = false;
@@ -140,7 +140,7 @@ public class Room implements Runnable{
 	
 	//runs server
 	//accepts clients into server
-	public void runServer()
+	/*public void runServer()
 	{
 		running = true;
 		System.out.println("Server running!");
@@ -149,7 +149,7 @@ public class Room implements Runnable{
 				//creates new thread 
 				//ss.accept() listens for a connection to the server socket and then returns the socket connected to
 				//also passes in the current array of threads
-				hosts.add(new ThreadServer(ss.accept(), hosts, threads));
+				clients.add(new ThreadServer(ss.accept(), hosts, threads));
 				//starts the newly created thread
 				threads.add(new Thread(hosts.get(hosts.size()-1)));
 				System.out.println("Clients running: "+threads.size());
@@ -159,7 +159,7 @@ public class Room implements Runnable{
 				//e.printStackTrace();
 			} 
 		}
-	}
+	}*/
 	
 	//Main method
 	public static void main(String[] args)
