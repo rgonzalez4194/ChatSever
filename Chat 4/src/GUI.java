@@ -40,7 +40,7 @@ class GUI {
 			gui += "|"+centerString("WELCOME TO ...                                      ",width+18)+"|\n";
 			gui += "|"+centerString("    ___________________  ___   ________          __ ",width+18)+"|\n";
 			gui += "|"+centerString("  / ___/_  __/ ____/  |/  /  / ____/ /_  ____ _/ / ",width+18)+"|\n";
-			gui += "|"+centerString("  \\__ \\ / / / __/ / /|_/   / /   / __ \\/ __ `/ __/ ",width+18)+"|\n";
+			gui += "|"+centerString("    \\__ \\ / / / __/ / /"+"\\"+"_| /  / /   / __ \\/ __ `/ __/ ",width+18)+"|\n";
 			gui += "|"+centerString(" ___/ // / / /___/ /  / /  / /___/ / / / /_/ / /_  ",width+18)+"|\n";
 			gui += "|"+centerString("/____//_/ /_____/_/  /_/   \\____/_/ /_/\\__,_/\\__/  ",width+18)+"|\n";
 			gui += "|"+centerString(loopChar('/', 55),width+18)+"|\n";
