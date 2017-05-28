@@ -170,7 +170,9 @@ class GUI {
 	}
 	
 	private void printWithColor(String print){
+		AnsiConsole.systemInstall();
 		AnsiConsole.out.println(print);
+		AnsiConsole.systemUninstall();
 	}
 	
 	// Make sure that all values of r, g, and b are between 0 and 5
