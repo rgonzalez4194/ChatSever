@@ -91,11 +91,11 @@ class GUI {
 
 	public Color nameColor(String name)
 	{
-		//System.out.println("I got called | "+ name.trim());
-		if (users.contains(name))
-		{
-			System.out.println(colors.size() + " | " + users.size());
-			return Ansi.Color.valueOf(colors.get(users.indexOf(name)).toUpperCase());
+		for(int i=0; i<users.size(); i++){
+			if(users.get(i).trim().equals(name.trim())){
+				System.out.println(name + " : " +colors.get(i));
+				return Ansi.Color.valueOf(colors.get(i).toUpperCase());
+			}
 		}
 		return GREEN;
 	}
@@ -118,7 +118,6 @@ class GUI {
 	
 	public void updateColors(String colors)
 	{
-		System.out.println(colors);
 		String[] temp = colors.split(","); 
 		for(int i=this.users.size()-1; i>=0; i--){
 			this.users.remove(i);
@@ -159,10 +158,10 @@ class GUI {
 		gui += ansi().render("@|green +---------------+"+loopChar('-',width+2)+"+\n|@");
 		for(int i=0; i<length; i++){
 			String user    = (i>users.size()-1) ? (loopChar(' ',12)) : (users.get(i));
+			System.out.println(user);
 			String message = getMessage(i);
 			String[] messageParts = (message.contains(":")) ? message.split(":",2) : message.split("", 2);
-			System.out.println(message.length()+", "+messageParts[0].length()+", "+messageParts[1].length());
-			gui += ansi().render("@|green | |@"+ansi().fg(nameColor(user)).fgBright(nameColor(messageParts[0])).a(user) + "@|green   | |@" + ansi().fg(nameColor(user)).fgBright(nameColor(user)).a(message.substring(0, messageParts[0].length()+1)) + ansi().fg(nameColor(messageParts[0])).a(message.substring(messageParts[0].length()+1,message.length())) +"@|green  |\n|@");
+			gui += ansi().render("@|green | |@"+ansi().fg(nameColor(user)).fgBright(nameColor(user)).a(user) + "@|green   | |@" + ansi().fg(nameColor(messageParts[0])).fgBright(nameColor(messageParts[0])).a(message.substring(0, messageParts[0].length()+1)) + ansi().fg(nameColor(messageParts[0])).a(message.substring(messageParts[0].length()+1,message.length())) +"@|green  |\n|@");
 		}
 		gui += ansi().render("@|green +---------------+"+loopChar('-',width+2)+"+\n|@");
 		gui += ansi().render("@|green [ |@"+ ansi().fg(GREEN).fgBrightGreen().a(centerString(username,12+3)) +"@|green ] |@");
@@ -230,6 +229,36 @@ class GUI {
 	// Make sure that all values of r, g, and b are between 0 and 5
 	private String colorBackCode(int r, int g, int b){
 		return "\u001b[48;5;"+(16 + 36 * r + 6 * g + b)+"m";
+	}
+
+	public void updateStats(String stats) {
+		// TODO Auto-generated method stub
+		System.out.println(stats);
+		String[] temp = stats.split(",");
+		
+		String colors = "";
+		String users  = "";
+		
+		/*boolean first = true;
+		for(int i=0; i<temp.length; i++){
+			String[] temp2 = temp[i].split(":");
+			if (first)
+			{
+				colors += temp2[1];
+				users  += temp2[0];
+				first = false;
+			}
+			else if (!first){
+				colors += "," +temp2[1];
+				users  += "," +temp2[0];
+			}
+		}
+		System.out.println(users);
+		System.out.println(colors);
+		updateUsers(users);
+		System.out.println(this.users.toString());
+		updateColors(colors);
+		System.out.println(this.colors.toString());*/
 	}
 }
 

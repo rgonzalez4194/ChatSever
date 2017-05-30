@@ -15,7 +15,6 @@ public class ThreadServer implements Runnable{
 
 	private ArrayList<ThreadServer> hosts;
 	private ArrayList<Thread>       threads;
-	private ArrayList<String>       colors; 
 	
 	private DataInputStream  dis;
 	private DataOutputStream dos;
@@ -25,22 +24,21 @@ public class ThreadServer implements Runnable{
 	
 	public boolean running; 
 	public String  name;
+	public String  color;
 
 	//Constructor, creates new array of threads 
 	public ThreadServer(){
 		hosts   = new ArrayList<ThreadServer>();
 		threads = new ArrayList<Thread>();
-		colors  = new ArrayList<String>();
 	}
 
 	//Super Constructor, Sets socket, tells us our server is running, and passes in current array of threads
-	public ThreadServer(Socket s, ArrayList<ThreadServer> hosts, ArrayList<Thread> threads, ArrayList<String> colors)
+	public ThreadServer(Socket s, ArrayList<ThreadServer> hosts, ArrayList<Thread> threads)
 	{
 		this.s = s;
 		this.running = true;
 		this.hosts = hosts;
 		this.threads = threads;
-		this.colors = colors;
 	}
 	
 	//run method runs when you .start a thread
@@ -53,8 +51,7 @@ public class ThreadServer implements Runnable{
 			
 			//while loop reads messages and sends them to all clients as long as our server is running
 			this.name = dis.readUTF();
-			String color = dis.readUTF();
-			this.colors.add(color);
+			this.color = dis.readUTF();
 			System.out.println("User: "+name+" has joined the Server!");
 			while(running)
 			{
@@ -125,47 +122,31 @@ public class ThreadServer implements Runnable{
 	public void sendAll(String message) throws IOException{
 		for(int i=0; i<this.hosts.size(); i++){
 			ThreadServer thread = this.hosts.get(i);
-			thread.sendMessage(getColors()); 
-			thread.sendMessage(getUsers());
+			thread.sendMessage(getStats()); 
 			thread.sendMessage(message);
 		}
 	}
 	
 	
-	private String getColors()
+	private String getStats()
 	{
-		String colors  = "";
-		boolean first = true;
-		for(int i = 0; i > colors.length()-1; i++)
-		{	String temp = this.colors.get(i);
-			if(first){
-				colors = temp;
-				first = false;
-			} else {
-				colors += "," +temp;
-			}
-		}
-		
-		return colors; 
-	}
-	
-	private String getUsers() {
-		String users  = "";
+		String stats  = "";
 		boolean first = true;
 		
 		Iterator<ThreadServer> iter = hosts.iterator();
 		while(iter.hasNext()){
 			ThreadServer temp = iter.next();
 			if(first){
-				users = temp.name;
+				stats = temp.name + ":" + temp.color ;
 				first = false;
 			} else {
-				users = users + "," +temp.name;
+				stats = stats + "," +temp.name + ":" + temp.color;
 			}
 		}
 		
-		return users;
+		return stats;
 	}
+	
 	
 	//runs server
 	//accepts clients into server
@@ -178,7 +159,7 @@ public class ThreadServer implements Runnable{
 				//creates new thread 
 				//ss.accept() listens for a connection to the server socket and then returns the socket connected to
 				//also passes in the current array of threads
-				hosts.add(new ThreadServer(ss.accept(), hosts, threads, colors));
+				hosts.add(new ThreadServer(ss.accept(), hosts, threads));
 				//starts the newly created thread
 				threads.add(new Thread(hosts.get(hosts.size()-1)));
 				System.out.println("Clients running: "+threads.size());

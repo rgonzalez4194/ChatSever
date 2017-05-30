@@ -110,18 +110,16 @@ public class Client implements Runnable{
 		//Receives messages from server
 		public void run(){
 			
-			gui.updateUsers(name);
-			gui.updateColors(color);
+			//gui.updateUsers(name);
+			//gui.updateColors(color);
 			gui.printGUI();
 			
 			while(running)
 			{
 				try {
-					String colors = dis.readUTF();
-					gui.updateColors(colors);
 					
-					String users = dis.readUTF();
-					gui.updateUsers(users);
+					String stats = dis.readUTF();
+					gui.updateStats(stats);
 					//System.out.println(users);
 					
 					String message = dis.readUTF();
