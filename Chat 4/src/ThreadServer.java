@@ -30,15 +30,17 @@ public class ThreadServer implements Runnable{
 	public ThreadServer(){
 		hosts   = new ArrayList<ThreadServer>();
 		threads = new ArrayList<Thread>();
+		colors  = new ArrayList<String>();
 	}
 
 	//Super Constructor, Sets socket, tells us our server is running, and passes in current array of threads
-	public ThreadServer(Socket s, ArrayList<ThreadServer> hosts, ArrayList<Thread> threads)
+	public ThreadServer(Socket s, ArrayList<ThreadServer> hosts, ArrayList<Thread> threads, ArrayList<String> colors)
 	{
 		this.s = s;
 		this.running = true;
 		this.hosts = hosts;
 		this.threads = threads;
+		this.colors = colors;
 	}
 	
 	//run method runs when you .start a thread
@@ -51,7 +53,8 @@ public class ThreadServer implements Runnable{
 			
 			//while loop reads messages and sends them to all clients as long as our server is running
 			this.name = dis.readUTF();
-			this.colors.add(dis.readUTF());
+			String color = dis.readUTF();
+			this.colors.add(color);
 			System.out.println("User: "+name+" has joined the Server!");
 			while(running)
 			{
@@ -175,7 +178,7 @@ public class ThreadServer implements Runnable{
 				//creates new thread 
 				//ss.accept() listens for a connection to the server socket and then returns the socket connected to
 				//also passes in the current array of threads
-				hosts.add(new ThreadServer(ss.accept(), hosts, threads));
+				hosts.add(new ThreadServer(ss.accept(), hosts, threads, colors));
 				//starts the newly created thread
 				threads.add(new Thread(hosts.get(hosts.size()-1)));
 				System.out.println("Clients running: "+threads.size());

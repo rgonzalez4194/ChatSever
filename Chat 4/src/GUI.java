@@ -18,7 +18,7 @@ class GUI {
 	String			  color;
 	ArrayList<String> users;
  	ArrayList<String> messages;
- 	String[] colors;
+ 	ArrayList<String> colors;
 	
 	public GUI(String username, int minSize, int width){
 		AnsiConsole.systemInstall();
@@ -27,6 +27,7 @@ class GUI {
 		this.width    = width;
 		this.users    = new ArrayList<String>();
 		this.messages = new ArrayList<String>();
+		this.colors   = new ArrayList<String>();
 	}
 	
 	public GUI(int minSize, int width){
@@ -90,18 +91,13 @@ class GUI {
 
 	public Color nameColor(String name)
 	{
-		for(int i= 0; i > users.size()-1; i++)
+		//System.out.println("I got called | "+ name.trim());
+		if (users.contains(name))
 		{
-			if (name.equals(users.get(i)))
-			{
-				return Ansi.Color.valueOf(colors[i].toUpperCase());
-			}
-			else
-			{
-				return GREEN;
-			}
+			System.out.println(colors.size() + " | " + users.size());
+			return Ansi.Color.valueOf(colors.get(users.indexOf(name)).toUpperCase());
 		}
-		return null;
+		return GREEN;
 	}
 	
 	public void updateUsers(String users){
@@ -122,7 +118,14 @@ class GUI {
 	
 	public void updateColors(String colors)
 	{
-		this.colors = colors.split(","); 
+		System.out.println(colors);
+		String[] temp = colors.split(","); 
+		for(int i=this.users.size()-1; i>=0; i--){
+			this.users.remove(i);
+		}
+		for(int i=0; i<temp.length; i++){
+			this.colors.add(temp[i]);
+		}
 	}
 	
 	public void updateMessages(String message){ 
@@ -159,7 +162,7 @@ class GUI {
 			String message = getMessage(i);
 			String[] messageParts = (message.contains(":")) ? message.split(":",2) : message.split("", 2);
 			System.out.println(message.length()+", "+messageParts[0].length()+", "+messageParts[1].length());
-			gui += ansi().render("@|green | |@"+ansi().fg(nameColor(user)).fgBright(nameColor(user)).a(user) + "@|green   | |@" + ansi().fg(nameColor(user)).fgBright(nameColor(user)).a(message.substring(0, messageParts[0].length()+1)) + ansi().fg(nameColor(user)).a(message.substring(messageParts[0].length()+1,message.length())) +"@|green  |\n|@");
+			gui += ansi().render("@|green | |@"+ansi().fg(nameColor(user)).fgBright(nameColor(messageParts[0])).a(user) + "@|green   | |@" + ansi().fg(nameColor(user)).fgBright(nameColor(user)).a(message.substring(0, messageParts[0].length()+1)) + ansi().fg(nameColor(messageParts[0])).a(message.substring(messageParts[0].length()+1,message.length())) +"@|green  |\n|@");
 		}
 		gui += ansi().render("@|green +---------------+"+loopChar('-',width+2)+"+\n|@");
 		gui += ansi().render("@|green [ |@"+ ansi().fg(GREEN).fgBrightGreen().a(centerString(username,12+3)) +"@|green ] |@");

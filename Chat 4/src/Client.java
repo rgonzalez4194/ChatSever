@@ -41,7 +41,7 @@ public class Client implements Runnable{
 		
 		// Constructor
 		// Takes the socket connected to the server
-		public Client(Socket socket)
+		public Client(Socket socket, String color)
 		{
 			try {
 				//sets socket
@@ -50,6 +50,7 @@ public class Client implements Runnable{
 				
 				dis = new DataInputStream(new BufferedInputStream (s.getInputStream()));
 				
+				this.color = color;
 				gui = new GUI(name, 15, 60);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -71,7 +72,7 @@ public class Client implements Runnable{
 		public void send()
 		{
 			//creates a thread to receive incoming messages
-			scanner = new Thread(new Client(s));
+			scanner = new Thread(new Client(s, color));
 			scanner.start();
 			
 			String line = "";
@@ -110,6 +111,7 @@ public class Client implements Runnable{
 		public void run(){
 			
 			gui.updateUsers(name);
+			gui.updateColors(color);
 			gui.printGUI();
 			
 			while(running)
